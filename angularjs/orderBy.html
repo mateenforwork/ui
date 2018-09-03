@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+<body>
+
+<p>Click the table headers to change the sorting order:</p>
+
+<div ng-app="myApp" ng-controller="namesCtrl">
+<p>{{currentOrder}}</p>
+<table border="1" width="100%">
+<tr>
+<th ng-click="orderByMe('name')">Name 
+	<span class="up" ng-show="currentOrder.column === 'name'  && currentOrder.reverse === false">&#8593;</span> 
+	<span class="down" ng-show="currentOrder.column === 'name'  && currentOrder.reverse === true">&#8595;</span>
+</th>
+<th ng-click="orderByMe('country')">Country
+	<span class="up" ng-show="currentOrder.column === 'country'  && currentOrder.reverse === false">&#8593;</span> 
+	<span class="down" ng-show="currentOrder.column === 'country'  && currentOrder.reverse === true">&#8595;</span>
+</th>
+</tr>
+<tr ng-repeat="x in names">
+<td>{{x.name}}</td>
+<td>{{x.country}}</td>
+</tr>
+</table>
+
+</div>
+
+<script>
+angular.module('myApp', []).controller('namesCtrl',['$scope', 'orderByFilter', function($scope,orderBy) {
+	$scope.currentOrder={};
+    var names = [
+		{name:'Jani',country:'Norway'},
+		{name:'Carl',country:'Sweden'},
+		{name:'Margareth',country:'England'},
+		{name:'Hege',country:'Norway'},
+		{name:'Joe',country:'Denmark'},
+		{name:'Gustav',country:'Sweden'},
+		{name:'Birgit',country:'Denmark'},
+		{name:'Mary',country:'England'},
+		{name:'Kai',country:'Norway'}
+	];
+	$scope.names = orderBy(names);
+    $scope.orderByMe = function(x) {
+		$scope.currentOrder.column=x;
+		if($scope.currentOrder.reverse===undefined){
+			$scope.currentOrder.reverse=false;
+		} else if($scope.currentOrder.reverse===false){
+			$scope.currentOrder.reverse=true;
+		} else if($scope.currentOrder.reverse===true){
+			$scope.currentOrder.reverse=undefined;
+			$scope.currentOrder.column=null;
+		}
+		$scope.names = orderBy(names,$scope.currentOrder.column,$scope.currentOrder.reverse);
+		
+        
+    }
+	
+}]);
+</script>
+
+</body>
+</html>
